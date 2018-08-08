@@ -1,8 +1,8 @@
 SYSTEM is Python 3.6
 
-python run.py --definitions algos_po.yaml --dataset glove-100-angular
-python run.py --help
-python plot.py --dataset glove-100-angular
+python run.py --definitions algos_po.yaml --local --dataset fashion-mnist-784-euclidean
+
+MAYBE python plot.py --dataset fashion-mnist-784-euclidean --definitions algos_po.yaml
 
 ## can run without docker!
 	--local

@@ -80,11 +80,13 @@ def mainold():
 
 
 class PositKDD(BaseANN):
-    def __init__(self, metric, xtype):
+    def __init__(self, metric, rest):
+        print ("\n\n","PositKDD",metric,rest)
+        type = rest.get("type","float")
         if metric not in ('euclidean', 'hamming'):
             raise NotImplementedError("PositKDD does not support metric " + self._metric)
-        self.name = 'PositKDD(type=%s,metric=%s)' % (xtype,metric)
-        self._type = xtype
+        self.name = 'PositKDD(type=%s,metric=%s)' % (type,metric)
+        self._type = type
         self._metric = metric
         self._unk = 10
         xclass = nanoflanns2.kdtree_any_float
@@ -95,8 +97,7 @@ class PositKDD(BaseANN):
         self._index = t
 
     def fit(self, X):
-        if X.dtype != numpy.float32:
-            X = X.astype(numpy.float32)
+        X = X.astype(numpy.float32)
         #self._flann = pyflann.FLANN(target_precision=self._target_precision, algorithm='autotuned', log_level='info')
         #if self._metric == 'angular':
         #    X = sklearn.preprocessing.normalize(X, axis=1, norm='l2')
@@ -112,8 +113,8 @@ class PositKDD(BaseANN):
 
         rt = np.int32 if self._index.indexsize() == 4  else np.int64
         rb = np.zeros(k,dtype=rt)
-        qp = np.array(v).astype(np.float32)
-        n = self._index.knnSearchx(k,ndarray2ptr(qp,np.float32),ndarray2ptr(rb,rt))
+        v = np.array(v).astype(np.float32)
+        n = self._index.knnSearchx(k,ndarray2ptr(v,np.float32),ndarray2ptr(rb,rt))
         return rb[0:n]
 
 def main():

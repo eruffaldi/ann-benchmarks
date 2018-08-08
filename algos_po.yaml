@@ -1,5 +1,5 @@
 float:
-  any:
+  euclidean:
     flann:
      docker-tag: ann-benchmarks-flann
      module: ann_benchmarks.algorithms.flann
@@ -7,13 +7,16 @@ float:
      base-args: ["@metric"]
      run-groups:
        flann:
-         args: [[0.2, 0.5, 0.7, 0.8, 0.9, 0.95, 0.97]]
+         args: [[0.2]]
+         #args: [[0.2, 0.5, 0.7, 0.8, 0.9, 0.95, 0.97]]
     positkdd:
      docker-tag: posit_kdd
-     module: ann_benchmarks.algorithms.posit_kdd
+     module: ann_benchmarks.algorithms.positkdd
      constructor: PositKDD
      base-args: ["@metric"]
      run-groups:
        # PositKDD has  
        base:
-         args: [[0.2, 0.5, 0.7, 0.8, 0.9, 0.95, 0.97]]
+         arg-groups:
+            - {"type": ["float","soft16"]}
+         #args: [[0.2, 0.5, 0.7, 0.8, 0.9, 0.95, 0.97]]
