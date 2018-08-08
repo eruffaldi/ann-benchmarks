@@ -51,7 +51,7 @@ def doradiussearch(index,r,qp,nres):
     return rb[0:n]
 
 
-def maino():
+def mainold():
     print(dir(nanoflanns2))
     xclass = nanoflanns2.kdtree_any_float
     allt = xclass.list()
@@ -80,17 +80,18 @@ def maino():
 
 
 class PositKDD(BaseANN):
-    def __init__(self, metric, type):
-        self._type = _type
-        self.name = 'PositKDD(type=%s)' % self._type
+    def __init__(self, metric, xtype):
+        if metric not in ('euclidean', 'hamming'):
+            raise NotImplementedError("PositKDD does not support metric " + self._metric)
+        self.name = 'PositKDD(type=%s,metric=%s)' % (xtype,metric)
+        self._type = xtype
         self._metric = metric
         self._unk = 10
-        if self._metric != 'euclidean':
-            raise Exception("PositKDD does not support metric " + self._metric)
         xclass = nanoflanns2.kdtree_any_float
-        t = xclass(self._type)
+        pt = self._type + ("" if metric == "euclidean" else "_"+metric)
+        t = xclass(pt)
         if t is None:
-            raise Exception("unsupported class "+ self._type + " only: " + " ".join(xclass.list())) 
+            raise NotImplementedError("unsupported class "+ pt + " only: " + " ".join(xclass.list())) 
         self._index = t
 
     def fit(self, X):
@@ -102,6 +103,9 @@ class PositKDD(BaseANN):
         #self._flann.build_index(X)
         self._index.buildx(ndarray2ptr(X,np.float32),X.shape[0],X.shape[1],self._unk)
 
+    #def set_query_arguments(self, search_k):
+    #    self._search_k = search_k
+
     def query(self, v, k):
         if self._metric == 'angular':
             v = sklearn.preprocessing.normalize([v], axis=1, norm='l2')[0]
@@ -109,11 +113,11 @@ class PositKDD(BaseANN):
         rt = np.int32 if self._index.indexsize() == 4  else np.int64
         rb = np.zeros(k,dtype=rt)
         qp = np.array(v).astype(np.float32)
-        n = index.knnSearchx(k,ndarray2ptr(qp,np.float32),ndarray2ptr(rb,rt))
+        n = self._index.knnSearchx(k,ndarray2ptr(qp,np.float32),ndarray2ptr(rb,rt))
         return rb[0:n]
 
 def main():
-    a = PositKDD("euclidean","posit16")
+    a = PositKDD("euclidean","float")
 
     data = np.zeros((10,4),dtype=np.float32)
     print(data.flags['C_CONTIGUOUS'],data.dtype)
@@ -121,7 +125,7 @@ def main():
     data[1,:] = (3,2,8,9)
     #print ("init",data)
     a.fit(data)
-    print (a.query((3,2,7,8),10))
+    print ("query",a.query((3,2,7,8),2))
 
 if __name__ == '__main__':
     main()
