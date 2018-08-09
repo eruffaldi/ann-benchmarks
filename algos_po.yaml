@@ -10,7 +10,7 @@ float:
          args: [[0.2]]
          #args: [[0.2, 0.5, 0.7, 0.8, 0.9, 0.95, 0.97]]
     positkdd:
-     docker-tag: posit_kdd
+     docker-tag: ann-benchmarks-positkdd
      module: ann_benchmarks.algorithms.positkdd
      constructor: PositKDD
      base-args: ["@metric"]
@@ -18,5 +18,5 @@ float:
        # PositKDD has  
        base:
          arg-groups:
-            - {"type": ["float","soft16"]}
+            - {"type": ["float"]}
          #args: [[0.2, 0.5, 0.7, 0.8, 0.9, 0.95, 0.97]]

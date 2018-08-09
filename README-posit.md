@@ -1,5 +1,8 @@
-SYSTEM is Python 3.6
 
+# For local testing use
+export PYTHONPATH=../posit_kdtree/build/python
+
+# Then
 python run.py --definitions algos_po.yaml --local --dataset fashion-mnist-784-euclidean
 
 MAYBE python plot.py --dataset fashion-mnist-784-euclidean --definitions algos_po.yaml

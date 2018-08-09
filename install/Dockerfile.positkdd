@@ -1,1 +1,18 @@
-FROM posit_kdd
+FROM ann-benchmarks
+
+COPY deploy_softfloat.sh . 
+RUN ./deploy_softfloat.sh
+
+#note that we ignore submodule in posit_kdtree
+COPY deploy_cppposit.sh . 
+RUN ./deploy_cppposit.sh
+
+#assume having posit_kdtree here
+# --recurse-submodules
+ARG gituser
+ARG gitpass
+COPY deploy_kdtree.sh . 
+RUN ./deploy_kdtree.sh ${gituser} ${gitpass}
+
+#test
+RUN cd posit_kdtree/build/python && python3 nanotest2.py
