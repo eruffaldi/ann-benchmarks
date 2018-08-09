@@ -1,7 +1,7 @@
 FROM ann-benchmarks
 
 RUN apt-get update && apt-get install -y cmake
-RUN git clone https://github.com/mariusmuja/flann
+RUN git clone --depth 1 https://github.com/mariusmuja/flann
 RUN mkdir flann/build
 RUN cd flann/build && cmake ..
 RUN cd flann/build && make -j4

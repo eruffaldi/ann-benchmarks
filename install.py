@@ -6,11 +6,15 @@ from multiprocessing import Pool
 from ann_benchmarks.main import positive_int
 
 
-def build(library):
+def build(library,args):
     print('Building %s...' % library)
+    if args is not None and len(args) != 0:
+        q = " --build-arg " + " ".join([x.replace(" ","\\ ") for x in args])
+    else:
+        q = ""
     subprocess.check_call(
         'docker build \
-        --rm -t ann-benchmarks-%s -f install/Dockerfile.%s .' % (library, library), shell=True)
+        --rm -t ann-benchmarks-%s %s -f install/Dockerfile.%s .' % (library,q,library), shell=True)
 
 
 if __name__ == "__main__":
@@ -18,38 +22,54 @@ if __name__ == "__main__":
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
         "--proc",
+        '-p',
         default=1,
         type=positive_int,
         help="the number of process to build docker images")
     parser.add_argument(
         '--algorithm',
+        '-a',
         metavar='NAME',
         help='build only the named algorithm image',
         default=None)
+    parser.add_argument(
+        '--list-algorithms',
+        '-l',
+        action="store_true",
+        help='list algorithms')
+    parser.add_argument(
+        '--build-arg',
+        help='pass given args to all docker builds',
+        nargs="+")
     args = parser.parse_args()
 
-    print('Building base image...')
-    subprocess.check_call(
-        'docker build \
-        --rm -t ann-benchmarks -f install/Dockerfile .', shell=True)
-
-    if args.algorithm:
-        print('Building algorithm(%s) image...' % args.algorithm)
-        build(args.algorithm)
-    elif os.getenv('LIBRARY'):
-        print('Building algorithm(%s) image...' % os.getenv('LIBRARY'))
-        build(os.getenv('LIBRARY'))
-    else:
-        print('Building algorithm images... with (%d) processes' % args.proc)
-        dockerfiles = []
+    if args.list_algorithms:
         for fn in os.listdir('install'):
             if fn.startswith('Dockerfile.'):
-                dockerfiles.append(fn.split('.')[-1])
+                print(fn.split('.')[-1])
+    else:
+        print('Building base image...')
+        subprocess.check_call(
+            'docker build \
+            --rm -t ann-benchmarks -f install/Dockerfile .', shell=True)
 
-        if args.proc == 1:
-            [build(tag) for tag in dockerfiles]
+        if args.algorithm:
+            print('Building algorithm(%s) image...' % args.algorithm)
+            build(args.algorithm,args.build_arg)
+        elif os.getenv('LIBRARY'):
+            print('Building algorithm(%s) image...' % os.getenv('LIBRARY'))
+            build(os.getenv('LIBRARY'),args.build_arg)
         else:
-            pool = Pool(processes=args.proc)
-            pool.map(build, dockerfiles)
-            pool.close()
-            pool.join()
+            print('Building algorithm images... with (%d) processes' % args.proc)
+            dockerfiles = []
+            for fn in os.listdir('install'):
+                if fn.startswith('Dockerfile.'):
+                    dockerfiles.append(fn.split('.')[-1])
+
+            if args.proc == 1:
+                [build(tag,args.build_args) for tag in dockerfiles]
+            else:
+                pool = Pool(processes=args.proc)
+                pool.map(lambda x: build(x,args.build_arg), dockerfiles)
+                pool.close()
+                pool.join()

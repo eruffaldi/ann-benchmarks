@@ -2,6 +2,11 @@
 # For local testing use
 export PYTHONPATH=../posit_kdtree/build/python
 
+# Minimal docker build
+
+	python install.py --algorithm flann
+	python install.py --algorithm positkdd --build-arg gituser=... gitpass=...
+	
 # Then
 python run.py --definitions algos_po.yaml --local --dataset fashion-mnist-784-euclidean
 

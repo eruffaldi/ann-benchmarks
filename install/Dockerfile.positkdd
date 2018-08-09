@@ -1,4 +1,5 @@
 FROM ann-benchmarks
+# this image accesses a private repo, use gituser and gitpass --build-arg
 
 COPY deploy_softfloat.sh . 
 RUN ./deploy_softfloat.sh
