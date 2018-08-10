@@ -19,3 +19,4 @@ RUN /deploy_kdtree.sh ${gituser} ${gitpass}
 
 #test
 RUN cd posit_kdtree/build/python && python3 nanotest2.py
+RUN cp posit_kdtree/build/python/nanoflanns2.so /usr/lib/python3.6
