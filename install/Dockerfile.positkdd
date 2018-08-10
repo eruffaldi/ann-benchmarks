@@ -1,19 +1,21 @@
 FROM ann-benchmarks
 # this image accesses a private repo, use gituser and gitpass --build-arg
-
-COPY deploy_softfloat.sh . 
-RUN ./deploy_softfloat.sh
+RUN apt-get -y install cmake
+COPY install/deploy_softfloat.sh /
+RUN /deploy_softfloat.sh
 
 #note that we ignore submodule in posit_kdtree
-COPY deploy_cppposit.sh . 
-RUN ./deploy_cppposit.sh
+COPY install/deploy_cppposit.sh /
+RUN /deploy_cppposit.sh
 
 #assume having posit_kdtree here
 # --recurse-submodules
+RUN apt-get -y install libboost-dev 
+RUN apt-get -y install libboost-python-dev
 ARG gituser
 ARG gitpass
-COPY deploy_kdtree.sh . 
-RUN ./deploy_kdtree.sh ${gituser} ${gitpass}
+COPY install/deploy_kdtree.sh /
+RUN /deploy_kdtree.sh ${gituser} ${gitpass}
 
 #test
 RUN cd posit_kdtree/build/python && python3 nanotest2.py

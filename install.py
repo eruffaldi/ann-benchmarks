@@ -9,12 +9,12 @@ from ann_benchmarks.main import positive_int
 def build(library,args):
     print('Building %s...' % library)
     if args is not None and len(args) != 0:
-        q = " --build-arg " + " ".join([x.replace(" ","\\ ") for x in args])
+        q = " ".join(["--build-arg " + x.replace(" ","\\ ") for x in args])
     else:
         q = ""
-    subprocess.check_call(
-        'docker build \
-        --rm -t ann-benchmarks-%s %s -f install/Dockerfile.%s .' % (library,q,library), shell=True)
+    s = 'docker build %s --rm -t ann-benchmarks-%s -f install/Dockerfile.%s .' % (q,library,library)
+    print ("Docker: ",s)
+    subprocess.check_call(s, shell=True)
 
 
 if __name__ == "__main__":
