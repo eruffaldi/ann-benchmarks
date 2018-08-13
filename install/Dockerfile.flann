@@ -3,8 +3,9 @@ FROM ann-benchmarks
 RUN apt-get update && apt-get install -y cmake
 RUN git clone --depth 1 https://github.com/mariusmuja/flann
 RUN mkdir flann/build
-RUN cd flann/build && cmake ..
-RUN cd flann/build && make -j4
+export CXXFLAGS=-march=native
+RUN cd flann/build && cmake -DCMAKE_BUILD_TYPE=Release  ..
+RUN cd flann/build && make -j
 RUN cd flann/build && make install
 RUN pip3 install sklearn
 RUN python3 -c 'import pyflann'
