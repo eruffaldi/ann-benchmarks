@@ -4,6 +4,9 @@ RUN apt-get -y install cmake
 COPY install/deploy_softfloat.sh /
 RUN /deploy_softfloat.sh
 
+COPY install/deploy_bfp.sh /
+RUN /deploy_bfp.sh
+
 #note that we ignore submodule in posit_kdtree
 COPY install/deploy_cppposit.sh /
 RUN /deploy_cppposit.sh
@@ -20,3 +23,7 @@ RUN /deploy_kdtree.sh ${gituser} ${gitpass}
 #test
 RUN cd posit_kdtree/build/python && python3 nanotest2.py
 RUN cp posit_kdtree/build/python/nanoflanns2.so /usr/lib/python3.6
+
+#note that we ignore submodule in posit_kdtree
+COPY install/deploy_softposit.sh /
+RUN /deploy_softposit.sh

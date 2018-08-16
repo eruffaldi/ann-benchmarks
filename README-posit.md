@@ -7,6 +7,9 @@ export PYTHONPATH=../posit_kdtree/build/python
 	python install.py --algorithm flann
 	python install.py --algorithm positkdd --build-arg gituser=... gitpass=...
 	
+## Login 
+
+	docker run --rm -i --entrypoint "" ann-benchmarks-positkdd bash
 # Then
 python run.py --definitions algos_po.yaml --local --dataset fashion-mnist-784-euclidean
 
