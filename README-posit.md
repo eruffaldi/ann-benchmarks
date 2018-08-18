@@ -9,7 +9,7 @@ export PYTHONPATH=../posit_kdtree/build/python
 	
 ## Login 
 
-	docker run --rm -i --entrypoint "" ann-benchmarks-positkdd bash
+	docker run --rm -ti --entrypoint "" ann-benchmarks-positkdd bash
 # Then
 python run.py --definitions algos_po.yaml --local --dataset fashion-mnist-784-euclidean
 

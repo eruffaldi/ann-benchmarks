@@ -5,7 +5,7 @@ git clone --depth 1 https://github.com/libcg/bfp
 cd bfp
 
 cp Makefile Makefile.orig
-sed '/^FLAGS =/s/$/ -march=native/' Makefile.orig > Makefile
+sed 's/^FLAGS =/s/$/ -march=native/' Makefile.orig > Makefile
 make
 mkdir /usr/include/bfp
 cp lib/libbfp.a /usr/lib
