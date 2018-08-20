@@ -20,6 +20,7 @@ ARG gitpass
 COPY install/deploy_kdtree.sh /
 RUN /deploy_kdtree.sh ${gituser} ${gitpass}
 
+
 #test
 RUN cd posit_kdtree/build/python && python3 nanotest2.py
 RUN cp posit_kdtree/build/python/nanoflanns2.so /usr/lib/python3.6
@@ -27,3 +28,7 @@ RUN cp posit_kdtree/build/python/nanoflanns2.so /usr/lib/python3.6
 #note that we ignore submodule in posit_kdtree
 COPY install/deploy_softposit.sh /
 RUN /deploy_softposit.sh
+
+RUN git clone --depth 1 https://github.com/johnmcfarlane/fixed_point
+RUN mkdir /usr/include/sg14
+RUN cp -r fixed_point/include/sg14/* /usr/include/sg14

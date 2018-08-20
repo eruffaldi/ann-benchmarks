@@ -71,7 +71,7 @@ def mainold():
         #print ("build",data.shape[0])
         #print(t.buildnp(data,10)) # data,rows,dim,maxleaf
         print ("\n\nbt ------ " ,bt)
-        print (" ",t.buildx(ndarray2ptr(data,np.float32),data.shape[0],data.shape[1],10)) # data,rows,dim,maxleaf
+        print (" ",t.buildx(ndarray2ptr(data,np.float32),data.shape[0],data.shape[1],10),False) # data,rows,dim,maxleaf
         print(" ",t.printStats())
         print (" ",doknnsearch(t,(3,2,7,8),10))
         print (" ",doradiussearch(t,5,(3,2,7,8),10))
@@ -80,7 +80,7 @@ def mainold():
 
 
 class PositKDD(BaseANN):
-    def __init__(self, metric, rest):
+    def __init__(self, metric, rest, from_float_tree = False):
         print ("\n\n","PositKDD",metric,rest)
         type = rest.get("type","float")
         if metric not in ('euclidean', 'hamming'):
@@ -89,6 +89,7 @@ class PositKDD(BaseANN):
         self._type = type
         self._metric = metric
         self._unk = 10
+        self.from_float_tree = from_float_tree
         xclass = nanoflanns2.kdtree_any_float
         pt = self._type + ("" if metric == "euclidean" else "_"+metric)
         t = xclass(pt)
@@ -102,7 +103,7 @@ class PositKDD(BaseANN):
         #if self._metric == 'angular':
         #    X = sklearn.preprocessing.normalize(X, axis=1, norm='l2')
         #self._flann.build_index(X)
-        self._index.buildx(ndarray2ptr(X,np.float32),X.shape[0],X.shape[1],self._unk)
+        self._index.buildx(ndarray2ptr(X,np.float32),X.shape[0],X.shape[1],self._unk,self.from_float_tree)
 
     #def set_query_arguments(self, search_k):
     #    self._search_k = search_k
