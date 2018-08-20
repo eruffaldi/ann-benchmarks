@@ -85,7 +85,7 @@ class PositKDD(BaseANN):
         type = rest.get("type","float")
         if metric not in ('euclidean', 'hamming'):
             raise NotImplementedError("PositKDD does not support metric " + self._metric)
-        self.name = 'PositKDD(type=%s,metric=%s)' % (type,metric)
+        self.name = 'PositKDD(type=%s,metric=%s,mode=%s)' % (type,metric,"normal" if not from_float_tree else "from float tree")
         self._type = type
         self._metric = metric
         self._unk = 10
