@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # docker run 
-git clone --depth 1 https://gitlab.com/cerlane/SoftPosit
+git clone --depth 1 https://gitlab.com/cerlane/SoftPosit.git/
 cd SoftPosit
 #!/bin/bash
 sed 's/double toDouble\(\)/\

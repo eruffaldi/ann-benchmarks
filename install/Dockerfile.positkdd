@@ -1,34 +1,40 @@
 FROM ann-benchmarks
 # this image accesses a private repo, use gituser and gitpass --build-arg
 RUN apt-get -y install cmake
+RUN apt-get -y install libboost-dev 
+RUN apt-get -y install libboost-python-dev
+
+#TODO ADD https://api.github.com/repos/eruffaldi/berkeley-softfloat-3/git/refs/heads/master version_softfloat.json
 COPY install/deploy_softfloat.sh /
 RUN /deploy_softfloat.sh
 
+ADD https://api.github.com/repos/eruffaldi/berkeley-softfloat-3/git/refs/heads/master version_bfp.json
 COPY install/deploy_bfp.sh /
 RUN /deploy_bfp.sh
 
 #note that we ignore submodule in posit_kdtree
+#ADD https://api.gitlab.com/repos/cerlane/SoftPosit/git/refs/heads/master version_softposit.json
+COPY install/deploy_softposit.sh /
+RUN /deploy_softposit.sh
+
+ADD https://api.github.com/repos/johnmcfarlane/fixed_point/git/refs/heads/master version_fixed_point.json
+RUN git clone --depth 1 https://github.com/johnmcfarlane/fixed_point
+RUN mkdir /usr/include/sg14
+RUN cp -r fixed_point/include/sg14/* /usr/include/sg14
+
+#note that we ignore submodule in posit_kdtree
+ADD https://api.github.com/repos/eruffaldi/cppPosit/git/refs/heads/master version_cppPosit.json
 COPY install/deploy_cppposit.sh /
 RUN /deploy_cppposit.sh
 
 #assume having posit_kdtree here
+# https://USER:PASSWORD@bitbucket.org/eruffaldi/posit_kdtree.git
 # --recurse-submodules
-RUN apt-get -y install libboost-dev 
-RUN apt-get -y install libboost-python-dev
 ARG gituser
 ARG gitpass
 COPY install/deploy_kdtree.sh /
 RUN /deploy_kdtree.sh ${gituser} ${gitpass}
 
-
 #test
-RUN cd posit_kdtree/build/python && python3 nanotest2.py
-RUN cp posit_kdtree/build/python/nanoflanns2.so /usr/lib/python3.6
-
-#note that we ignore submodule in posit_kdtree
-COPY install/deploy_softposit.sh /
-RUN /deploy_softposit.sh
-
-RUN git clone --depth 1 https://github.com/johnmcfarlane/fixed_point
-RUN mkdir /usr/include/sg14
-RUN cp -r fixed_point/include/sg14/* /usr/include/sg14
+RUN cd posit_kdtree/build/python && python3 nanoflann_any.py
+RUN cp posit_kdtree/build/python/pynanoflann_any.so /usr/lib/python3.6
