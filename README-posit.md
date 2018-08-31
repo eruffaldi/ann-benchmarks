@@ -3,7 +3,8 @@
 export PYTHONPATH=../posit_kdtree/build/python
 
 # Minimal docker build
-
+	docker images | grep ann-benchmarks
+	docker rmi ann-benchmarks-positkdd
 	python install.py --algorithm flann
 	python install.py --algorithm positkdd --build-arg gituser=... gitpass=...
 	
