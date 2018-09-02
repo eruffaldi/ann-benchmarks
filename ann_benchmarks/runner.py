@@ -205,7 +205,7 @@ def run_docker(definition, dataset, count, runs, timeout=5*3600, mem_limit=None)
         t = threading.Thread(target=stream_logs, daemon=True)
     else:
         t = threading.Thread(target=stream_logs)
-        t.daemon=True
+        t.daemon = True
     t.start()
     try:
         exit_code = container.wait(timeout=timeout)

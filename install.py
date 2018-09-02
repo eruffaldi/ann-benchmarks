@@ -12,9 +12,9 @@ def build(library,args):
         q = " ".join(["--build-arg " + x.replace(" ","\\ ") for x in args])
     else:
         q = ""
-    s = 'docker build %s --rm -t ann-benchmarks-%s -f install/Dockerfile.%s .' % (q,library,library)
-    print ("Docker: ",s)
-    subprocess.check_call(s, shell=True)
+    subprocess.check_call(
+        'docker build %s\
+        --rm -t ann-benchmarks-%s -f install/Dockerfile.%s .' % (q, library, library), shell=True)
 
 
 if __name__ == "__main__":
@@ -52,7 +52,6 @@ if __name__ == "__main__":
         subprocess.check_call(
             'docker build \
             --rm -t ann-benchmarks -f install/Dockerfile .', shell=True)
-
         if args.algorithm:
             print('Building algorithm(%s) image...' % args.algorithm)
             build(args.algorithm,args.build_arg)
@@ -73,3 +72,10 @@ if __name__ == "__main__":
                 pool.map(lambda x: build(x,args.build_arg), dockerfiles)
                 pool.close()
                 pool.join()
+        if args.proc == 1:
+            [build(tag,args.build_arg) for tag in dockerfiles]
+        else:
+            pool = Pool(processes=args.proc)
+            pool.map(lambda x: build(x, args.build_arg), dockerfiles)
+            pool.close()
+            pool.join()
