@@ -88,6 +88,8 @@ function""" % (definition.module, definition.constructor, definition.arguments)
     D = get_dataset(dataset)
     X_train = numpy.array(D['train'])
     X_test = numpy.array(D['test'])
+    if definition.dataset_items > 0:
+        X_test = X_test[0:definition.dataset_items,:]
     distance = D.attrs['distance']
     print('got a train set of size (%d * %d)' % X_train.shape)
     print('got %d queries' % len(X_test))
@@ -148,6 +150,11 @@ def run_from_cmdline():
         required=True,
         type=int)
     parser.add_argument(
+        '--dataset-items',
+        required=False,
+        default=0,
+        type=int)
+    parser.add_argument(
         'build')
     parser.add_argument(
         'queries',
@@ -161,6 +168,7 @@ def run_from_cmdline():
         algorithm=args.algorithm,
         docker_tag=None, # not needed
         module=args.module,
+        dataset_items=args.dataset_items,
         constructor=args.constructor,
         arguments=algo_args,
         query_argument_groups=query_args,
@@ -175,6 +183,7 @@ def run_docker(definition, dataset, count, runs, timeout=5*3600, mem_limit=None)
     cmd = ['--dataset', dataset,
            '--algorithm', definition.algorithm,
            '--module', definition.module,
+           '--dataset-items',definition.dataset_items,
            '--constructor', definition.constructor,
            '--runs', str(runs),
            '--count', str(count)]

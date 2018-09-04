@@ -27,6 +27,10 @@ ADD https://api.github.com/repos/eruffaldi/cppPosit/git/refs/heads/master versio
 COPY install/deploy_cppposit.sh /
 RUN /deploy_cppposit.sh
 
+ADD https://api.github.com/repos/stillwater-sc/universal/git/refs/heads/master version_stillwater.json
+COPY install/deploy_stillwater.sh /
+RUN /deploy_stillwater.sh
+
 #assume having posit_kdtree here
 # https://USER:PASSWORD@bitbucket.org/eruffaldi/posit_kdtree.git
 # --recurse-submodules

@@ -40,11 +40,14 @@ def algorithm_status(definition):
 
 
 def get_result_filename(dataset, count, definition, query_arguments):
+    du = [];
+    if definition.dataset_items > 0:
+        du.append(("dataset_items",definition.dataset_items))
     d = ['results',
          dataset,
          str(count),
          definition.algorithm,
-         re.sub(r'\W+', '_', json.dumps(definition.arguments + query_arguments, sort_keys=True)).strip('_')]
+         re.sub(r'\W+', '_', json.dumps(definition.arguments + query_arguments + du, sort_keys=True)).strip('_')]
     return os.path.join(*d)
 
 
