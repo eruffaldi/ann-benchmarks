@@ -66,16 +66,10 @@ if __name__ == "__main__":
                     dockerfiles.append(fn.split('.')[-1])
 
             if args.proc == 1:
-                [build(tag,args.build_args) for tag in dockerfiles]
+                [build(tag,args.build_arg) for tag in dockerfiles]
             else:
                 pool = Pool(processes=args.proc)
                 pool.map(lambda x: build(x,args.build_arg), dockerfiles)
                 pool.close()
                 pool.join()
-        if args.proc == 1:
-            [build(tag,args.build_arg) for tag in dockerfiles]
-        else:
-            pool = Pool(processes=args.proc)
-            pool.map(lambda x: build(x, args.build_arg), dockerfiles)
-            pool.close()
-            pool.join()
+
