@@ -27,6 +27,10 @@ ADD https://api.github.com/repos/eruffaldi/cppPosit/git/refs/heads/master versio
 COPY install/deploy_cppposit.sh /
 RUN /deploy_cppposit.sh
 
+ADD https://api.github.com/repos/eruffaldi/half/git/refs/heads/master version_half.json
+COPY install/deploy_half.sh /
+RUN /deploy_half.sh
+
 ADD https://api.github.com/repos/stillwater-sc/universal/git/refs/heads/master version_stillwater.json
 COPY install/deploy_stillwater.sh /
 RUN /deploy_stillwater.sh
