@@ -40,6 +40,7 @@ RUN /deploy_stillwater.sh
 # --recurse-submodules
 ARG gituser
 ARG gitpass
+ADD https://${gituser}:${gitpass}@api.bitbucket.org/2.0/repositories/eruffaldi/posit_kdtree/refs/branches/master >version_kdtree.json
 COPY install/deploy_kdtree.sh /
 RUN /deploy_kdtree.sh ${gituser} ${gitpass}
 
