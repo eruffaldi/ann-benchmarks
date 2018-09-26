@@ -2,6 +2,7 @@
 #
 # docker run 
 git clone https://$1:$2@bitbucket.org/eruffaldi/posit_kdtree.git
+#sed -i .bak 's/#include <boost\/python\/numpy.hpp>/#include <boost\/numpy.hpp>/g' posit_kdtree/python/pynanoflann_any.cpp
 cd posit_kdtree
 mkdir build
 cd build

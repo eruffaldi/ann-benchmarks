@@ -10,6 +10,7 @@ sed 's/double toDouble\(\)/\
 	&/' source/include/softposit_cpp.h > tmp
 cp tmp source/include/softposit_cpp.h
 cd build/Linux-x86_64-GCC
+sed -i .bak -e '/^OPTIMISATION/s/ON  =/ON  = -fPIC/' Makefile | less
 make	
 cp softposit.a /usr/lib/libsoftposit.a
 cp ../../source/include/softposit.h ../../source/include/softposit_cpp.h ../../source/include/softposit_types.h /usr/include

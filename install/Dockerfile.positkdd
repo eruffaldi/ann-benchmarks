@@ -1,8 +1,8 @@
 FROM ann-benchmarks
 # this image accesses a private repo, use gituser and gitpass --build-arg
-RUN apt-get -y install cmake
-RUN apt-get -y install libboost-dev 
-RUN apt-get -y install libboost-python-dev
+RUN apt-get -y --allow-unauthenticated install cmake
+RUN apt-get -y --allow-unauthenticated install libboost-dev 
+RUN apt-get -y --allow-unauthenticated install libboost-python-dev
 
 #TODO ADD https://api.github.com/repos/eruffaldi/berkeley-softfloat-3/git/refs/heads/master version_softfloat.json
 COPY install/deploy_softfloat.sh /
