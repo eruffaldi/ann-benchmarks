@@ -40,10 +40,10 @@ RUN /deploy_stillwater.sh
 # --recurse-submodules
 ARG gituser
 ARG gitpass
-ADD https://${gituser}:${gitpass}@api.bitbucket.org/2.0/repositories/eruffaldi/posit_kdtree/refs/branches/master >version_kdtree.json
+ADD https://${gituser}:${gitpass}@api.bitbucket.org/2.0/repositories/eruffaldi/posit_kdtree/refs/branches/master version_kdtree.json
 COPY install/deploy_kdtree.sh /
 RUN /deploy_kdtree.sh ${gituser} ${gitpass}
 
 #test
-RUN cd posit_kdtree/build/python && python3 nanoflann_any.py
 RUN cp posit_kdtree/build/python/pynanoflann_any.so /usr/lib/python3.6
+#RUN cd posit_kdtree/build/python && python3 nanoflann_any.py
