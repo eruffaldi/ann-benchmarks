@@ -12,11 +12,6 @@ ADD https://api.github.com/repos/eruffaldi/berkeley-softfloat-3/git/refs/heads/m
 COPY install/deploy_bfp.sh /
 RUN /deploy_bfp.sh
 
-#note that we ignore submodule in posit_kdtree
-#ADD https://api.gitlab.com/repos/cerlane/SoftPosit/git/refs/heads/master version_softposit.json
-COPY install/deploy_softposit.sh /
-RUN /deploy_softposit.sh
-
 ADD https://api.github.com/repos/johnmcfarlane/fixed_point/git/refs/heads/master version_fixed_point.json
 RUN git clone --depth 1 https://github.com/johnmcfarlane/fixed_point
 RUN mkdir /usr/include/sg14
@@ -35,6 +30,11 @@ ADD https://api.github.com/repos/stillwater-sc/universal/git/refs/heads/master v
 COPY install/deploy_stillwater.sh /
 RUN /deploy_stillwater.sh
 
+#note that we ignore submodule in posit_kdtree
+#ADD https://api.gitlab.com/repos/cerlane/SoftPosit/git/refs/heads/master version_softposit.json
+COPY install/deploy_softposit.sh /
+RUN /deploy_softposit.sh
+
 #assume having posit_kdtree here
 # https://USER:PASSWORD@bitbucket.org/eruffaldi/posit_kdtree.git
 # --recurse-submodules
@@ -44,6 +44,8 @@ ADD https://${gituser}:${gitpass}@api.bitbucket.org/2.0/repositories/eruffaldi/p
 COPY install/deploy_kdtree.sh /
 RUN /deploy_kdtree.sh ${gituser} ${gitpass}
 
+RUN apt-get -y --allow-unauthenticated vim
+
 #test
-RUN cp posit_kdtree/build/python/pynanoflann_any.so /usr/lib/python3.6
+RUN cp posit_kdtree/build/python/pynanoflann_any.so /usr/lib/python3.?
 #RUN cd posit_kdtree/build/python && python3 nanoflann_any.py
