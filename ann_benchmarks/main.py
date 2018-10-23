@@ -9,7 +9,8 @@ import traceback
 
 from ann_benchmarks.datasets import get_dataset, DATASETS
 from ann_benchmarks.constants import INDEX_DIR
-from ann_benchmarks.algorithms.definitions import get_definitions, list_algorithms, get_result_filename, algorithm_status, InstantiationStatus
+from ann_benchmarks.algorithms.definitions import get_definitions, list_algorithms, algorithm_status, InstantiationStatus
+from ann_benchmarks.results import get_result_filename
 from ann_benchmarks.runner import run, run_docker
 
 
@@ -75,11 +76,15 @@ def main():
         '--timeout',
         type=int,
         help='Timeout (in seconds) for each individual algorithm run, or -1 if no timeout should be set',
-        default=-1)
+        default=5*3600)
     parser.add_argument(
         '--local',
         action='store_true',
         help='If set, then will run everything locally (inside the same process) rather than using Docker')
+    parser.add_argument(
+        '--batch',
+        action='store_true',
+        help='If set, algorithms get all queries at once')
     parser.add_argument(
         '--max-n-algorithms',
         type=int,
@@ -105,7 +110,7 @@ def main():
 
     dataset = get_dataset(args.dataset)
     dimension = len(dataset['train'][0]) # TODO(erikbern): ugly
-    point_type = 'float' # TODO(erikbern): should look at the type of X_train
+    point_type = dataset.attrs.get('point_type', 'float')
     distance = dataset.attrs['distance']
     definitions = get_definitions(args.definitions, dimension, point_type, distance, args.count,args.dataset_items)
 
@@ -121,8 +126,8 @@ def main():
         not_yet_run = []
         for query_arguments in query_argument_groups:
             fn = get_result_filename(args.dataset,
-                    args.count, definition, query_arguments)
-            if not os.path.exists(fn):
+                    args.count, definition, query_arguments, args.batch)
+            if args.force or not os.path.exists(fn):
                 not_yet_run.append(query_arguments)
         if not_yet_run:
             if definition.query_argument_groups:
@@ -132,7 +137,7 @@ def main():
     definitions = filtered_definitions
 
     random.shuffle(definitions)
-    
+
     if args.algorithm:
         print('running only', args.algorithm)
         definitions = [d for d in definitions if d.algorithm == args.algorithm]
@@ -143,7 +148,7 @@ def main():
         docker_tags = set()
         for image in docker_client.images.list():
             for tag in image.tags:
-                tag, _ = tag.split(':')
+                tag = tag.split(':')[0]
                 docker_tags.add(tag)
 
         if args.docker_tag:
@@ -190,9 +195,9 @@ def main():
 
         try:
             if args.local:
-                run(definition, args.dataset, args.count, args.runs)
+                run(definition, args.dataset, args.count, args.runs, args.batch)
             else:
-                run_docker(definition, args.dataset, args.count, args.runs)
+                run_docker(definition, args.dataset, args.count, args.runs, args.timeout, args.batch)
         except KeyboardInterrupt:
             break
         except:
