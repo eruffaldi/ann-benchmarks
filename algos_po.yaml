@@ -15,8 +15,34 @@ float:
      constructor: PositKDD
      base-args: ["@metric"]
      run-groups:
-       # PositKDD has  
+       # PositKDD has
        base:
          arg-groups:
-            - {"type": ["float"]}
-         #args: [[0.2, 0.5, 0.7, 0.8, 0.9, 0.95, 0.97]]
+           #-----------------------------------------------------------------
+            # TEST POSIT16
+            - {"type": ['posit16_1.cpp', 'posit16_0.soft', 'posit16_1.still']}
+            - true
+
+            #-----------------------------------------------------------------
+            # TEST POSIT32
+            #- {"type": ['posit32_2.cpp', 'posit32_2.soft', 'posit32_2.still']}
+            #- true
+
+            #-----------------------------------------------------------------
+            # TEST POSIT8  # ATTUALMENTE HA PROBLEMI
+            #- {"type": ['posit8_0.cpp', 'posit8_0.cpptab', 'posit8_0.soft', 'posit8_0.still']}
+            #- true
+
+            #-----------------------------------------------------------------
+            # TEST  FLOAT
+            #- {"type": ['float32.native', 'float64.native', 'float16.half', 'float16.soft', 'float32.soft']}
+            #- true
+
+            #-----------------------------------------------------------------
+            # TEST  FIXED
+            #- {"type": ['fixed32_16.sg', 'fixed16_8.sg']}
+            #- true
+
+            # ----------------------------------------------------------------
+            # ALL TYPE
+            #- {"type":['float32.native', 'float64.native', 'float16.half', 'posit8_0.cpp', 'posit16_1.cpp', 'posit32_2.cpp', 'posit8_0.cppf', 'posit16_1.cppf', 'posit32_2.cppf', 'posit8_0.cpptab', 'float16.soft', 'float32.soft', 'posit8_0.soft', 'posit16_0.soft', 'posit32_2.soft', 

@@ -33,6 +33,11 @@ def main():
         default='glove-100-angular',
         choices=DATASETS.keys())
     parser.add_argument(
+        '--dataset-items',
+        required=False,
+        default=0,
+        type=int)
+    parser.add_argument(
         "-k", "--count",
         default=10,
         type=positive_int,
@@ -182,6 +187,8 @@ def main():
 
     for definition in definitions:
         print(definition, '...')
+        if args.dataset_items != 0:
+            definition.dataset_items = args.dataset_items
 
         try:
             if args.local:

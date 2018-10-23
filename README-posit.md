@@ -11,6 +11,10 @@ export PYTHONPATH=../posit_kdtree/build/python
 ## Login 
 
 	docker run --rm -ti --entrypoint "" ann-benchmarks-positkdd bash
+
+## Types info
+	 python3 posit_kdtree/python/nanoflann_any.py --info
+
 # Then
 python run.py --definitions algos_po.yaml --local --dataset fashion-mnist-784-euclidean
 
