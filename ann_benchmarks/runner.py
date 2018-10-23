@@ -188,7 +188,7 @@ def run_docker(definition, dataset, count, runs, timeout, batch, mem_limit=None)
     cmd = ['--dataset', dataset,
            '--algorithm', definition.algorithm,
            '--module', definition.module,
-           '--dataset-items',definition.dataset_items,
+           '--dataset-items',str(definition.dataset_items),
            '--constructor', definition.constructor,
            '--runs', str(runs),
            '--count', str(count)]
