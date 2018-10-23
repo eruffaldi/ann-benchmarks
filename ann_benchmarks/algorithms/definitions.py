@@ -12,7 +12,7 @@ from enum import Enum
 from itertools import product
 
 
-Definition = collections.namedtuple('Definition', ['algorithm', 'constructor', 'module', 'docker_tag', 'arguments', 'query_argument_groups', 'disabled'])
+Definition = collections.namedtuple('Definition', ['algorithm', 'constructor', 'module', 'docker_tag', 'arguments', 'query_argument_groups', 'disabled','dataset_items'])
 
 
 def instantiate_algorithm(definition):
@@ -105,7 +105,7 @@ def get_unique_algorithms(definition_file):
     return list(sorted(algos))
 
 
-def get_definitions(definition_file, dimension, point_type="float", distance_metric="euclidean", count=10):
+def get_definitions(definition_file, dimension, point_type="float", distance_metric="euclidean", count=10, dataset_items=0):
     definitions = _get_definitions(definition_file)
 
     algorithm_definitions = {}
@@ -175,6 +175,7 @@ def get_definitions(definition_file, dimension, point_type="float", distance_met
                     constructor=algo['constructor'],
                     arguments=aargs,
                     query_argument_groups=query_args,
+                    dataset_items=dataset_items,
                     disabled=algo.get('disabled', False)
                 ))
 

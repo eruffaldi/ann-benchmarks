@@ -20,13 +20,13 @@ float:
          arg-groups:
            #-----------------------------------------------------------------
             # TEST POSIT16
-            - {"type": ['posit16_1.cpp', 'posit16_0.soft', 'posit16_1.still']}
-            - true
+            # {"type": ['posit16_1.cpp', 'posit16_0.soft', 'posit16_1.still']}
+            #- true
 
             #-----------------------------------------------------------------
             # TEST POSIT32
-            #- {"type": ['posit32_2.cpp', 'posit32_2.soft', 'posit32_2.still']}
-            #- true
+            - {"type": ['posit32_2.cpp', 'posit32_2.soft', 'posit32_2.still']}
+            - true
 
             #-----------------------------------------------------------------
             # TEST POSIT8  # ATTUALMENTE HA PROBLEMI

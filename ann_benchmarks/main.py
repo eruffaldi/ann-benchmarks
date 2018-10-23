@@ -107,7 +107,7 @@ def main():
     dimension = len(dataset['train'][0]) # TODO(erikbern): ugly
     point_type = 'float' # TODO(erikbern): should look at the type of X_train
     distance = dataset.attrs['distance']
-    definitions = get_definitions(args.definitions, dimension, point_type, distance, args.count)
+    definitions = get_definitions(args.definitions, dimension, point_type, distance, args.count,args.dataset_items)
 
     # Filter out, from the loaded definitions, all those query argument groups
     # that correspond to experiments that have already been run. (This might
@@ -187,8 +187,6 @@ def main():
 
     for definition in definitions:
         print(definition, '...')
-        if args.dataset_items != 0:
-            definition.dataset_items = args.dataset_items
 
         try:
             if args.local:
