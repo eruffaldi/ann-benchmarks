@@ -3,7 +3,7 @@ import numpy
 import sklearn.preprocessing
 from ann_benchmarks.algorithms.base import BaseANN
 
-import nanoflanns2
+import pynanoflann_any as nanoflanns2
 import numpy as np
 import ctypes
 
