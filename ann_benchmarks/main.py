@@ -73,7 +73,7 @@ def main():
         help='run each algorithm instance %(metavar)s times and use only the best result',
         default=2)
     parser.add_argument(
-        '-cpu_limit',
+        '--cpu-limit',
         help='select cpus as 0-N or J',
         type=str,
         default=None)
