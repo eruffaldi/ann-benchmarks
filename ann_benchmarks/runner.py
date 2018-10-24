@@ -91,7 +91,7 @@ function""" % (definition.module, definition.constructor, definition.arguments)
     X_test = numpy.array(D['test'])
     if definition.dataset_items > 0:
         X_test = X_test[0:definition.dataset_items,:]
-        X_train = X_train[0:definition.dataset_items,:]
+        #X_train = X_train[0:definition.dataset_items,:]
     distance = D.attrs['distance']
     print('got a train set of size (%d * %d)' % X_train.shape)
     print('got %d queries' % len(X_test))
