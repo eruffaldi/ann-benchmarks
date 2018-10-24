@@ -25,6 +25,20 @@ MAYBE python plot.py --dataset fashion-mnist-784-euclidean --definitions algos_p
 ## can run single algorithm
 	--algorithm
 
+# Replacing Environment Variables
+
+Using sed
+	sed -e "s/\${i}/1/" -e "s/\${word}/dog/"
+
+Using envsubst (if present)
+
+Using bash
+
+	eval "cat <<EOF
+	$(<template.txt)
+	EOF
+	" 2> /dev/null
+
 
 # Examples
 

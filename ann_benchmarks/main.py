@@ -73,6 +73,11 @@ def main():
         help='run each algorithm instance %(metavar)s times and use only the best result',
         default=2)
     parser.add_argument(
+        '-cpu_limit',
+        help='select cpus as 0-N or J',
+        type=str,
+        default=None)
+    parser.add_argument(
         '--timeout',
         type=int,
         help='Timeout (in seconds) for each individual algorithm run, or -1 if no timeout should be set',
@@ -197,7 +202,7 @@ def main():
             if args.local:
                 run(definition, args.dataset, args.count, args.runs, args.batch)
             else:
-                run_docker(definition, args.dataset, args.count, args.runs, args.timeout, args.batch)
+                run_docker(definition, args.dataset, args.count, args.runs, args.timeout, args.batch,cpu_limit=args.cpu_limit)
         except KeyboardInterrupt:
             break
         except:

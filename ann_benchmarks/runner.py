@@ -182,7 +182,7 @@ def run_from_cmdline():
     run(definition, args.dataset, args.count, args.runs, args.batch)
 
 
-def run_docker(definition, dataset, count, runs, timeout, batch, mem_limit=None):
+def run_docker(definition, dataset, count, runs, timeout, batch, mem_limit=None,cpu_limit=None):
     import colors  # Think it doesn't work in Python 2
 
     cmd = ['--dataset', dataset,
@@ -201,10 +201,11 @@ def run_docker(definition, dataset, count, runs, timeout, batch, mem_limit=None)
     if mem_limit is None:
         mem_limit = psutil.virtual_memory().available
     print('Memory limit:', mem_limit)
-    cpu_limit = "0-%d" % (multiprocessing.cpu_count() - 1)
-    if not batch:
-        # Limit to first cpu if not in batch mode
-        cpu_limit = "0"
+    if cpu_limit is None:
+        cpu_limit = "0-%d" % (multiprocessing.cpu_count() - 1)
+        if not batch:
+            # Limit to first cpu if not in batch mode
+            cpu_limit = "0"
     print('Running on CPUs:', cpu_limit)
 
     container = client.containers.run(
