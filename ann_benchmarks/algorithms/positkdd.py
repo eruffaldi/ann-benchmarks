@@ -29,7 +29,8 @@ def ndarray2ptr(a,dt):
     if not a.flags['C_CONTIGUOUS']:
         raise Exception("Expected C_CONTIGUOUS")
     if len(a.strides) == 2:
-        if a.strides[0] == a.shape[1]*a.dtype.itemsize and a.strides[0] == 1:
+        # (rows > 1, fields) row major: stride
+        if a.strides[0] == a.shape[1]*a.dtype.itemsize and a.strides[1] == 1:
             raise Exception("Expected row major and not " + a.ctypes.strides)
     v = a.ctypes.data_as(ctypes.c_void_p)#.value
     #print ("ndarray2ptr",a[0:3,:],a.dtype,a.shape,v,dir(v),"to",v.value,aid(aid))
@@ -107,6 +108,17 @@ class PositKDD(BaseANN):
 
     #def set_query_arguments(self, search_k):
     #    self._search_k = search_k
+    def batch_query(self, X, k):
+        if self._metric == 'angular':
+            v = sklearn.preprocessing.normalize(v, axis=1, norm='l2')
+        rt = np.int32 if self._index.indexsize() == 4  else np.int64
+        N = X.shape[0]
+        self.rb = np.zeros((N,k),dtype=rt)
+        v = np.array((N,k)).astype(np.float32)
+        n = self._index.knnSearchxN(N, k,ndarray2ptr(v,np.float32),ndarray2ptr(self.rb,rt))
+
+    def get_batch_results(self):
+        return self.rb
 
     def query(self, v, k):
         if self._metric == 'angular':
