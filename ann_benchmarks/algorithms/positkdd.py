@@ -88,7 +88,7 @@ class PositKDD(BaseANN):
         self.name = 'PositKDD(type=%s,metric=%s,mode=%s)' % (type,metric,"normal" if not from_float_tree else "from float tree")
         self._type = type
         self._metric = metric
-        self._unk = 10
+        self.maxleaf = 10
         self.from_float_tree = from_float_tree
         xclass = nanoflanns2.kdtree_any_float
         pt = self._type + ("" if metric == "euclidean" else "_"+metric)
@@ -103,7 +103,7 @@ class PositKDD(BaseANN):
         #if self._metric == 'angular':
         #    X = sklearn.preprocessing.normalize(X, axis=1, norm='l2')
         #self._flann.build_index(X)
-        self._index.buildx(ndarray2ptr(X,np.float32),X.shape[0],X.shape[1],self._unk,self.from_float_tree)
+        self._index.buildx(ndarray2ptr(X,np.float32),X.shape[0],X.shape[1],self.maxleaf,self.from_float_tree)
 
     #def set_query_arguments(self, search_k):
     #    self._search_k = search_k

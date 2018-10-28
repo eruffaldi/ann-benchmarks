@@ -68,35 +68,32 @@ def create_xls(result):
 
         for test_ in split_by_test:
             items_ = []
-            items_.append(algorithm_)
-            items_.append(dataset_)
+            items_.append(algorithm_) #1.algorithm
+            items_.append(dataset_) #2.dataset
 
             type_ = re.findall(r'type=.*,metric', test_)[0]
             type_ = type_[5:len(type_)-7]
-            items_.append(type_)
+            items_.append(type_) #3.type
             float_tree = "float tree" in test_
 
             #campi vuoti (commit, image-id...)
-            items_.append('')
-            items_.append('')
-            items_.append('')
-            items_.append('')
+            items_.append('') #machine
+            items_.append('') #image
+            items_.append('') #commit
+            items_.append('') #date
 
             test_ = test_.split("k-nn")[1]
             results_ = re.findall(r'(?:\d+[.]?\d+|\sinf\,)', test_)
+            print("xx results",results)
             for val in results_ :
-                items_.append(val)
+                items_.append(val) #?
+            # for missing
+            for qq in range(len(results_),7):
+                items_.append("")
 
             #campi vuoto (data_items)
-            items_.append('')
-
-            if float_tree:
-                items_.append("TRUE")
-            else:
-                items_.append("FALSE")
-
-            #print(items_)
-            array_items.append(items_)
+            items_.append('') 
+            items_.append("TRUE" if float_tree else "FALSE")
 
     for row in range(0, len(array_items)):
         for col in range(0,len(array_items[0])):
