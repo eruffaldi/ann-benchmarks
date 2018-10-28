@@ -114,8 +114,8 @@ class PositKDD(BaseANN):
         rt = np.int32 if self._index.indexsize() == 4  else np.int64
         N = X.shape[0]
         self.rb = np.zeros((N,k),dtype=rt)
-        v = np.array((N,k)).astype(np.float32)
-        n = self._index.knnSearchxN(N, k,ndarray2ptr(v,np.float32),ndarray2ptr(self.rb,rt))
+        v = np.array(X).astype(np.float32)
+        n = self._index.knnSearchx(N,k,ndarray2ptr(v,np.float32),ndarray2ptr(self.rb,rt))
 
     def get_batch_results(self):
         return self.rb
@@ -127,7 +127,7 @@ class PositKDD(BaseANN):
         rt = np.int32 if self._index.indexsize() == 4  else np.int64
         rb = np.zeros(k,dtype=rt)
         v = np.array(v).astype(np.float32)
-        n = self._index.knnSearchx(k,ndarray2ptr(v,np.float32),ndarray2ptr(rb,rt))
+        n = self._index.knnSearchx(1, k,ndarray2ptr(v,np.float32),ndarray2ptr(rb,rt))
         return rb[0:n]
 
 def main():
