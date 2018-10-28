@@ -4,6 +4,7 @@ import argparse
 import os, json, pickle, yaml
 import numpy
 import hashlib
+import tabulate
 
 from ann_benchmarks import results
 from ann_benchmarks.algorithms.definitions import get_algorithm_name
@@ -53,7 +54,7 @@ def create_xls(result):
                  'dataset_items', 'float_tree']]
 
     info_ = str(result)
-    temp_ = re.split(':\s{' , info_)
+    temp_ = re.split(r'(:\s{)|(}\)],\s)' , info_)    
     algorithm_ = temp_[0]
     algorithm_ = algorithm_[2:len(algorithm_)-1]
     split_by_dataset = temp_[1:]
@@ -130,6 +131,8 @@ def load_all_results():
     return (all_runs_by_dataset, all_runs_by_algorithm)
 
 if __name__ == "__main__":
+	import pprint
 	runs_by_ds, runs_by_algo = load_all_results()
-	#print(runs_by_algo)
+	pprint.pprint(runs_by_algo)
+        #    print(k,"\n",tabulate.tabulate(v))
 	create_xls(runs_by_algo);
