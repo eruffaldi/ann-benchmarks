@@ -47,11 +47,11 @@ def get_dataset_label(desc):
 def create_xls(result):
     workbook = xlsxwriter.Workbook('result.xlsx')
     worksheet = workbook.add_worksheet()
-    array_items = [['algorithm', 'dataset', 'type', 'macchina', 'docker_image',
-                'commit', 'date of commit', 'k-nn', 'epsilon',
-                'largeepsilon', 'rel', 'qps', 'build',
-                'candidates', 'indexsize', 'queryssize',
-                 'dataset_items', 'float_tree']]
+    array_items = [['algorithm', 'dataset', 'type', 'host', 'docker_image',
+                'commit', 'date of commit', 'k-nn(Recall)', 'epsilon(Recall 0.01)',
+                'largeepsilon(Recall 0.01)', 'rel(Relative Error)', 'qps(1/sec)', 'buildtime(sec)',
+                'candidates(count)', 'indexsize(kB)', 'queriessize(kB sec)',
+                 'dataset_items(count)', 'float_tree(bool)']]
 
     info_ = str(result)
     temp_ = re.split(r'(:\s{)|(}\)],\s)' , info_)    
@@ -80,7 +80,7 @@ def create_xls(result):
             items_.append('') #machine
             items_.append('') #image
             items_.append('') #commit
-            items_.append('') #date
+            items_.append(test_) #date
 
             test_ = test_.split("k-nn")[1]
             results_ = re.findall(r'(?:\d+[.]?\d+|\sinf\,)', test_)
@@ -116,6 +116,7 @@ def load_all_results():
             dataset = get_dataset(properties["dataset"])
             cached_true_dist = list(dataset["distances"])
             old_sdn = sdn
+        print(properties,f)
         algo = properties["algo"]
         ms = compute_all_metrics(cached_true_dist, f, properties)
         algo_ds = get_dataset_label(sdn)
