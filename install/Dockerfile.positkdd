@@ -39,11 +39,13 @@ RUN /deploy_cppposit.sh
 #assume having posit_kdtree here
 # https://USER:PASSWORD@bitbucket.org/eruffaldi/posit_kdtree.git
 # --recurse-submodules
-ARG gituser
-ARG gitpass
-ADD https://${gituser}:${gitpass}@api.bitbucket.org/2.0/repositories/eruffaldi/posit_kdtree/refs/branches/master version_kdtree.json
+#ARG gituser
+#ARG gitpass
+#ADD https://${gituser}:${gitpass}@api.bitbucket.org/2.0/repositories/eruffaldi/posit_kdtree/refs/branches/master version_kdtree.json
+ADD https://api.github.com/repos/eruffaldi/posit_kdtree/git/refs/heads/master version_kdtree.json
 COPY install/deploy_kdtree.sh /
-RUN /deploy_kdtree.sh ${gituser} ${gitpass}
+RUN /deploy_kdtree.sh 
+#${gituser} ${gitpass}
 
 RUN apt-get -y --allow-unauthenticated install vim
 RUN pip3 install tabulate
