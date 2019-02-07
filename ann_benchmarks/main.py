@@ -99,6 +99,9 @@ def main():
         '--run-disabled',
         help='run algorithms that are disabled in algos.yml',
         action='store_true')
+    parser.add_argument(
+        '--base-path',
+        help='base path above ann_benchmarks for containing: results data and ann_benchmarks')
 
     args = parser.parse_args()
     if args.timeout == -1:
@@ -202,7 +205,7 @@ def main():
             if args.local:
                 run(definition, args.dataset, args.count, args.runs, args.batch)
             else:
-                run_docker(definition, args.dataset, args.count, args.runs, args.timeout, args.batch,cpu_limit=args.cpu_limit)
+                run_docker(definition, args.dataset, args.count, args.runs, args.timeout, args.batch,cpu_limit=args.cpu_limit,base_path=args.base_path)
         except KeyboardInterrupt:
             break
         except:

@@ -182,7 +182,7 @@ def run_from_cmdline():
     run(definition, args.dataset, args.count, args.runs, args.batch)
 
 
-def run_docker(definition, dataset, count, runs, timeout, batch, mem_limit=None,cpu_limit=None):
+def run_docker(definition, dataset, count, runs, timeout, batch, mem_limit=None,cpu_limit=None,base_path=None):
     import colors  # Think it doesn't work in Python 2
 
     cmd = ['--dataset', dataset,
@@ -207,14 +207,15 @@ def run_docker(definition, dataset, count, runs, timeout, batch, mem_limit=None,
             # Limit to first cpu if not in batch mode
             cpu_limit = "0"
     print('Running on CPUs:', cpu_limit)
-
+    base_path = "." if base_path is None else base_path
+    print('Base path is:',base_path)
     container = client.containers.run(
         definition.docker_tag,
         cmd,
         volumes={
-            os.path.abspath('ann_benchmarks'): {'bind': '/home/app/ann_benchmarks', 'mode': 'ro'},
-            os.path.abspath('data'): {'bind': '/home/app/data', 'mode': 'ro'},
-            os.path.abspath('results'): {'bind': '/home/app/results', 'mode': 'rw'},
+            os.path.abspath(os.path.join(base_path,'ann_benchmarks')): {'bind': '/home/app/ann_benchmarks', 'mode': 'ro'},
+            os.path.abspath(os.path.join(base_path,'data')): {'bind': '/home/app/data', 'mode': 'ro'},
+            os.path.abspath(os.path.join(base_path,'results')): {'bind': '/home/app/results', 'mode': 'rw'},
         },
         cpuset_cpus=cpu_limit,
         mem_limit=mem_limit,
