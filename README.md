@@ -83,6 +83,18 @@ Install
 
 The only prerequisite is Python (tested with 3.6) and Docker.
 
+Docker
+------
+
+Under Linux install docker and then check
+
+	sudo groupadd docker
+	sudo usermod -aG docker $USER
+	docker run hello-world
+
+Then
+----
+
 1. Clone the repo.
 2. Run `pip install -r requirements.txt`.
 3. Run `python install.py` to build all the libraries inside Docker containers (this can take a while, like 10-30 minutes).
