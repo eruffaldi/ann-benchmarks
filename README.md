@@ -99,6 +99,11 @@ Then
 2. Run `pip install -r requirements.txt`.
 3. Run `python install.py` to build all the libraries inside Docker containers (this can take a while, like 10-30 minutes).
 
+Check if docker fully works
+---------------------------
+
+	docker build --rm -t ann-benchmarks -f install/Dockerfile
+
 Running
 =======
 
